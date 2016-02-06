@@ -18,8 +18,13 @@ type User struct {
 	Role      string `json:"role,omitempty"`
 	TimeZone  string `json:"time_zone,omitempty"`
 	Color     string `json:"color,omitempty"`
-	UserURL   string `json:"user_url,omitempty"`
+	UserURL   string `json:"html_url,omitempty"`
 	AvatarURL string `json:"avatar_url,omitempty"`
+}
+
+type UserObject struct {
+	User `json:"object"`
+	At   string `json:"at"`
 }
 
 // Users is a list of users

@@ -26,7 +26,7 @@ type Incident struct {
 	NumberOfEscalations   int               `json:"number_of_escalations,omitempty"`
 	ResolvedByUser        *User             `json:"resolved_by_user,omitempty"`
 	AssignedToUser        *User             `json:"assigned_to_user,omitempty"`
-	AssignedTo            []*User           `json:"assigned_to,omitempty"`
+	AssignedTo            []*UserObject     `json:"assigned_to,omitempty"`
 }
 
 // Incidents is a list of incidents
