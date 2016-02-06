@@ -36,8 +36,9 @@ type Incidents struct {
 
 // IncidentSummary type
 type IncidentSummary struct {
-	Subject     string //`json:"subject,omitempty"`
-	Description string //`json:"description,omitempty"`
+	Subject     string `json:"subject,omitempty"`
+	Hostname    string `json:"HOSTNAME"`
+	Description string `json:"pd_description,omitempty"`
 }
 
 // Get returns a single incident by id if found
