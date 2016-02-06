@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -167,12 +168,18 @@ func (c *Client) Do(req *http.Request, output interface{}) (*http.Response, erro
 	return res, err
 }
 
+type OneErrorObject struct {
+	Message string    `json:"message"`
+	Code    ErrorCode `json:"code"`
+}
+
 // An ErrorResponse represents one or more errors created by an API request.
 type ErrorResponse struct {
 	Response *http.Response
-	Message  string    `json:"message"`
-	Code     ErrorCode `json:"code"`
-	Errors   []string  `json:"errors"`
+	Message  string          `json:"message"`
+	Code     ErrorCode       `json:"code"`
+	Errors   []string        `json:"errors"`
+	OneError *OneErrorObject `json:"error"`
 }
 
 func (r *ErrorResponse) Error() string {
@@ -190,7 +197,16 @@ func CheckResponse(r *http.Response) error {
 	v := &ErrorResponse{Response: r}
 	d, err := ioutil.ReadAll(r.Body)
 	if err == nil && d != nil {
+		log.Printf("Got response: %s", string(d))
 		json.Unmarshal(d, v)
+		if one_err := v.OneError; one_err != nil {
+			if one_err.Message != "" {
+				v.Message = one_err.Message
+			}
+			if one_err.Code != 0 {
+				v.Code = one_err.Code
+			}
+		}
 	}
 
 	return v

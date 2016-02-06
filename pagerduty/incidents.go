@@ -76,3 +76,57 @@ func (s *IncidentsService) List(opt *IncidentsOptions) ([]Incident, *http.Respon
 
 	return incidents.Incidents, res, err
 }
+
+type IncidentResolveBody struct {
+	// RequesterID is the ID of a user. Required in token auth mode.
+	RequesterID string `json:"requester_id,omitempty"`
+}
+
+// Resolve an incident
+func (s *IncidentsService) Resolve(id string, body *IncidentResolveBody) (*Incident, *http.Response, error) {
+	incident := new(Incident)
+
+	res, err := s.client.Put("incidents/"+id+"/resolve", body, incident)
+	if err != nil {
+		return nil, res, err
+	}
+
+	return incident, res, err
+}
+
+type IncidentAcknowledgeBody struct {
+	// RequesterID is the ID of a user. Required in token auth mode.
+	RequesterID string `json:"requester_id,omitempty"`
+}
+
+// Acknowledge an incident
+func (s *IncidentsService) Acknowledge(id string, body *IncidentAcknowledgeBody) (*Incident, *http.Response, error) {
+	incident := new(Incident)
+
+	res, err := s.client.Put("incidents/"+id+"/acknowledge", body, incident)
+	if err != nil {
+		return nil, res, err
+	}
+
+	return incident, res, err
+}
+
+// IncidentSnoozeBody provides the body for the Snooze request
+type IncidentSnoozeBody struct {
+	// RequesterID is the ID of a user. Required in token auth mode.
+	RequesterID string `json:"requester_id,omitempty"`
+	// Duration is the number of seconds to snooze. It is required.
+	Duration int `json:"duration"`
+}
+
+// Snooze an incident
+func (s *IncidentsService) Snooze(id string, body *IncidentSnoozeBody) (*Incident, *http.Response, error) {
+	incident := new(Incident)
+
+	res, err := s.client.Put("incidents/"+id+"/snooze", body, incident)
+	if err != nil {
+		return nil, res, err
+	}
+
+	return incident, res, err
+}
